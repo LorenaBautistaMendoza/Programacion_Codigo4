@@ -1,0 +1,54 @@
+/*Escribe un programa en C que lea de un archivo la secuencia que a continuación se muestra. El programa preguntará al usuario el 
+dato númerico que represente el número de caracteres de las palabras a buscar, de tal manera que todas aquellas palabras que tengan 
+longitud m se mostrarán en pantalla. El texto que podría estar en el archivo es el siguiente, tomadas del libro El amor en los tiempos 
+de cólera, de Gabriel García Márquez—: Era inevitable, el olor de las almendras amargas le recordaba siempre el destino de los amores 
+contrariados. El doctor Juvenal Urbino lo percibió desde que entró en la casa todavía en penumbras, adonde había acudido de urgencia
+a ocuparse de un caso que para él había dejado de ser urgente desde hacía muchos años
+Por ejemplo:
+Longitud: 5
+Resultado: desde, entro, había, había, desde, hacía*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PALABRA 100
+#define MAX_LINEA 1000
+
+void buscarPalabras(FILE *archivo, int longitud) {
+    char linea[MAX_LINEA];
+    char *palabra;
+
+    while (fgets(linea, MAX_LINEA, archivo) != NULL) {
+        palabra = strtok(linea, " ,.-\n");
+
+        while (palabra != NULL) {
+            if (strlen(palabra) == longitud) {
+                printf("%s\n", palabra);
+            }
+
+            palabra = strtok(NULL, " ,.-\n");
+        }
+    }
+}
+
+int main() {
+    FILE *archivo;
+    int longitud;
+
+    archivo = fopen("texto.txt", "r");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return 1;
+    }
+
+    printf("Longitud de la palabra: ");
+    scanf("%d", &longitud);
+
+    printf("Resultado de la busqueda:\n");
+    buscarPalabras(archivo, longitud);
+
+    fclose(archivo);
+
+    return 0;
+}
